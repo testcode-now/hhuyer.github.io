@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tài Xỉu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .button {
+            background: #ff7e5f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #feb47b;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        .dice {
+            width: 50px;
+            height: 50px;
+            margin: 20px auto;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Dice-1-b.svg/1200px-Dice-1-b.svg.png') no-repeat center;
+            background-size: cover;
+            animation: roll 1s ease-in-out;
+        }
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Tài Xỉu</h1>
+        <button class="button" onclick="playGame('tai')">Tài</button>
+        <button class="button" onclick="playGame('xiu')">Xỉu</button>
+        <div class="dice" id="dice"></div>
+        <div class="result" id="result"></div>
+        <audio id="diceSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+        <audio id="winSound" src="https://www.soundjay.com/button/sounds/button-4.mp3"></audio>
+        <audio id="loseSound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
+    </div>
+
+    <script>
+        function playGame(choice) {
+            const resultElement = document.getElementById('result');
+            const diceElement = document.getElementById('dice');
+            const diceSound = document.getElementById('diceSound');
+            const winSound = document.getElementById('winSound');
+            const loseSound = document.getElementById('loseSound');
+            
+            diceElement.style.animation = 'none';
+            diceSound.play();
+            
+            setTimeout(() => {
+                diceElement.style.animation = '';
+                const randomNumber = Math.floor(Math.random() * 6) + 1;
+                diceElement.style.backgroundImage = `url('https://upload.wikimedia.org/wikipedia/commons/thumb/${randomNumber}/${randomNumber}-b.svg/1200px-${randomNumber}-b.svg.png')`;
+                const result = randomNumber > 3 ? 'Tài' : 'Xỉu';
+                resultElement.textContent = `Bạn chọn ${choice}. Kết quả là ${result}.`;
+                
+                if ((choice === 'tai' && result === 'Tài') || (choice === 'xiu' && result === 'Xỉu')) {
+                    winSound.play();
+                } else {
+                    loseSound.play();
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
