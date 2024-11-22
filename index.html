@@ -4,60 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách liên kết</title>
-    <style> 
+    <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f9fb;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
             height: 100vh;
             margin: 0;
+            padding: 20px;
         }
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 1200px; /* Đảm bảo không quá rộng */
-            overflow-y: auto; /* Nếu có nội dung tràn, sẽ cuộn dọc */
-            max-height: 90vh; /* Giới hạn chiều cao */
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1100px;
+            overflow-y: auto;
+            max-height: 75vh;
+        }
+        .philosophy {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 1.4em;
+            color: #333;
+            font-style: italic;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .philosophy:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .author {
+            font-size: 1em;
+            color: #666;
+            text-align: center;  /* Căn giữa tên tác giả */
+            margin-top: 10px;
+            font-style: normal;
         }
         .link-item {
             display: flex;
             align-items: center;
             margin: 20px 0;
-            padding: 10px;
+            padding: 20px;
             background-color: #ffffff;
             color: #333;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 12px;
             transition: background-color 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            flex-wrap: nowrap; /* Ngăn không cho các phần tử bị tràn */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            flex-wrap: nowrap;
         }
         .link-item:hover {
             background-color: #f9f9f9;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
         }
         .link-text {
             flex-grow: 1;
-            margin-right: 20px; /* Giảm khoảng cách với hình ảnh */
+            margin-right: 20px;
+            font-size: 1.1em;
         }
         .link-description {
             font-size: 0.9em;
-            color: #666;
+            color: #888;
         }
         .link-image {
-            width: 50px;
-            height: 50px;
-            object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
         }
     </style>
     <!-- Google Ads Script -->
@@ -71,34 +99,86 @@
       gtag('js', new Date());
 
       gtag('config', 'G-N6VRJ98QJD');
+
+      // Mảng các câu triết lý và tác giả
+      const philosophies = [
+    { quote: "Cuộc sống không phải là về chờ đợi bão qua đi, mà là học cách nhảy múa trong mưa.", author: "Vivian Greene" },
+    { quote: "Hãy là sự thay đổi mà bạn muốn thấy trong thế giới.", author: "Mahatma Gandhi" },
+    { quote: "Đừng bao giờ từ bỏ ước mơ của mình, vì chỉ khi bạn làm vậy, bạn mới thực sự thất bại.", author: "Viktor Frankl" },
+    { quote: "Hạnh phúc không phải là điều bạn tìm thấy, mà là điều bạn tạo ra.", author: "Dalai Lama" },
+    { quote: "Sự kiên trì không phải là khả năng đợi, mà là khả năng giữ vững tinh thần khi mọi thứ không diễn ra như mong đợi.", author: "Unknown" },
+    { quote: "Cách duy nhất để làm một công việc tuyệt vời là yêu thích những gì bạn làm.", author: "Steve Jobs" },
+    { quote: "Đừng đếm những ngày qua, hãy làm cho những ngày đó có giá trị.", author: "Muhammad Ali" },
+    { quote: "Khi bạn dừng lại vì đã đạt được mục tiêu, bạn sẽ không bao giờ đạt được mục tiêu lớn hơn.", author: "Tony Robbins" },
+    { quote: "Không có con đường nào dẫn đến thành công, chỉ có những người đi đúng đường.", author: "John C. Maxwell" },
+    { quote: "Cuộc sống không phải là về những gì bạn có, mà là những gì bạn cho đi.", author: "Oprah Winfrey" },
+    { quote: "Hãy làm những gì bạn có thể, với những gì bạn có, ngay nơi bạn đang đứng.", author: "Theodore Roosevelt" },
+    { quote: "Sự thay đổi là một phần của cuộc sống, nhưng phát triển là một lựa chọn.", author: "John C. Maxwell" },
+    { quote: "Sự thành công không phải là chìa khóa của hạnh phúc, mà hạnh phúc là chìa khóa của sự thành công.", author: "Albert Schweitzer" },
+    { quote: "Hãy sống như thể bạn sẽ chết vào ngày mai. Hãy học như thể bạn sẽ sống mãi mãi.", author: "Mahatma Gandhi" },
+    { quote: "Để thành công, bạn cần phải thất bại nhiều lần.", author: "Thomas Edison" },
+    { quote: "Cuộc sống là một cuộc phiêu lưu, đừng để sợ hãi kìm hãm bạn.", author: "Unknown" },
+    { quote: "Nếu bạn không thể làm những điều vĩ đại, hãy làm những điều nhỏ bé một cách vĩ đại.", author: "Napoleon Hill" },
+    { quote: "Không phải lúc nào bạn cũng có thể kiểm soát được hoàn cảnh, nhưng bạn có thể kiểm soát được phản ứng của mình.", author: "Unknown" },
+    { quote: "Thành công là khả năng đi từ thất bại này đến thất bại khác mà không mất đi sự nhiệt tình.", author: "Winston Churchill" },
+    { quote: "Đừng bao giờ đánh giá thấp sức mạnh của sự kiên nhẫn.", author: "Unknown" },
+    { quote: "Chúng ta không thể thay đổi gió, nhưng có thể thay đổi cánh buồm.", author: "Jimmy Dean" },
+    { quote: "Thành công là khi bạn đi từ thất bại này đến thất bại khác mà không mất đi sự lạc quan.", author: "Winston Churchill" },
+    { quote: "Nếu bạn muốn đi nhanh, đi một mình. Nếu bạn muốn đi xa, đi cùng nhau.", author: "African Proverb" },
+    { quote: "Điều tốt đẹp không phải là nơi bạn đến, mà là những gì bạn trải qua trong suốt cuộc hành trình.", author: "Unknown" },
+    { quote: "Cách tốt nhất để dự đoán tương lai là tạo ra nó.", author: "Peter Drucker" },
+    { quote: "Lỗi lầm là cách tốt nhất để học hỏi và trưởng thành.", author: "Unknown" },
+    { quote: "Cuộc sống là gì nếu không phải là những giấc mơ và hành động để biến chúng thành hiện thực.", author: "Unknown" },
+    { quote: "Càng cho đi, càng nhận lại nhiều hơn.", author: "Unknown" },
+    { quote: "Những điều nhỏ bé làm nên sự khác biệt lớn lao.", author: "Unknown" },
+    { quote: "Cuộc sống không phải là về việc chờ đợi bão qua đi, mà là học cách nhảy múa trong mưa.", author: "Unknown" }
+      ];
+
+      // Lấy ngày hiện tại và chọn câu triết lý dựa trên ngày đó
+      const today = new Date();
+      const philosophyIndex = today.getDate() % philosophies.length;
+
+      // Hiển thị câu triết lý và tác giả trên trang
+      document.addEventListener('DOMContentLoaded', () => {
+        const philosophyElement = document.getElementById('philosophy');
+        const authorElement = document.getElementById('author');
+        philosophyElement.textContent = philosophies[philosophyIndex].quote;
+        authorElement.textContent = `- ${philosophies[philosophyIndex].author}`;
+      });
     </script>
 </head>
 <body>
+    <div class="philosophy" id="philosophy">
+        <!-- Câu triết lý sẽ được hiển thị ở đây -->
+    </div>
+    <div class="author" id="author">
+        <!-- Tên tác giả sẽ hiển thị ở đây -->
+    </div>
     <div class="container">
         <a href="file1.html" class="link-item">
             <div class="link-text">
-                chuyện ngủ ngon(từ từ thêm sau, để đây để có quảng cáo thôi:))
-                <div class="link-description">chuyện xem cho ngủ ngon</div>
+                Chuyện ngủ ngon (từ từ thêm sau, để đây để có quảng cáo thôi)
+                <div class="link-description">Chuyện xem cho ngủ ngon</div>
             </div>
             <img src="image1.jpg" alt="Image 1" class="link-image">
         </a>
         <a href="Gacha RNG 50.000!!!.html" class="link-item">
             <div class="link-text">
                 Cái này sau này sẽ để cái gì đó
-                <div class="link-description">test</div>
+                <div class="link-description">Test</div>
             </div>
             <img src="image2.jpg" alt="Image 2" class="link-image">
         </a>
         <a href="txiu.html" class="link-item">
             <div class="link-text">
-                Tài Xỉu:)
-                <div class="link-description">không phải như cái tên</div>
+                Tài Xỉu :)
+                <div class="link-description">Không phải như cái tên</div>
             </div>
             <img src="https://gamek.mediacdn.vn/133514250583805952/2020/12/8/photo-6-1607402067076104202952.jpg" alt="Image 3" class="link-image">
         </a>
         <a href="file4.html" class="link-item">
             <div class="link-text">
-                cái để số là chưa có gì đâu:v
+                Cái để số là chưa có gì đâu
                 <div class="link-description">Miêu tả cho file 4</div>
             </div>
             <img src="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-down-glyph-black-icon-png-image_691473.jpg" alt="Image 4" class="link-image">
@@ -113,37 +193,9 @@
         <a href="ai làm toán cấp 1.html" class="link-item">
             <div class="link-text">
                 Ai làm toán
-                <div class="link-description">giải được từng bước! (ai này mới học cấp 1)</div>
+                <div class="link-description">Giải được từng bước! (Ai này mới học cấp 1)</div>
             </div>
             <img src="https://static-media-cdn.mekongasean.vn/stores/news_dataimages/mekongaseanvn/012024/18/16/17sci-alphageometry-04-pljm-jumbo-6457.jpg" alt="Image 6" class="link-image">
-        </a>
-        <a href="file7.html" class="link-item">
-            <div class="link-text">
-                7
-                <div class="link-description">Miêu tả cho file 7</div>
-            </div>
-            <img src="image7.jpg" alt="Image 7" class="link-image">
-        </a>
-        <a href="file8.html" class="link-item">
-            <div class="link-text">
-                8
-                <div class="link-description">Miêu tả cho file 8</div>
-            </div>
-            <img src="image8.jpg" alt="Image 8" class="link-image">
-        </a>
-        <a href="file9.html" class="link-item">
-            <div class="link-text">
-                9
-                <div class="link-description">Miêu tả cho file 9</div>
-            </div>
-            <img src="image9.jpg" alt="Image 9" class="link-image">
-        </a>
-        <a href="file10.html" class="link-item">
-            <div class="link-text">
-                10
-                <div class="link-description">Miêu tả cho file 10</div>
-            </div>
-            <img src="image10.jpg" alt="Image 10" class="link-image">
         </a>
     </div>
 </body>
