@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách liên kết</title>
-    <style>
+    <style> 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -20,6 +25,9 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 80%;
+            max-width: 1200px; /* Đảm bảo không quá rộng */
+            overflow-y: auto; /* Nếu có nội dung tràn, sẽ cuộn dọc */
+            max-height: 90vh; /* Giới hạn chiều cao */
         }
         .link-item {
             display: flex;
@@ -32,6 +40,7 @@
             border-radius: 4px;
             transition: background-color 0.3s, box-shadow 0.3s;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex-wrap: nowrap; /* Ngăn không cho các phần tử bị tràn */
         }
         .link-item:hover {
             background-color: #f9f9f9;
@@ -39,26 +48,30 @@
         }
         .link-text {
             flex-grow: 1;
+            margin-right: 20px; /* Giảm khoảng cách với hình ảnh */
         }
         .link-description {
             font-size: 0.9em;
             color: #666;
         }
         .link-image {
-            margin-left: 20px;
+            width: 50px;
+            height: 50px;
+            object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
         }
     </style>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6138079895042375"
-     crossorigin="anonymous"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N6VRJ98QJD"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google Ads Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6138079895042375"
+        crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N6VRJ98QJD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-N6VRJ98QJD');
-</script>
+      gtag('config', 'G-N6VRJ98QJD');
+    </script>
 </head>
 <body>
     <div class="container">
@@ -67,70 +80,70 @@
                 Chỗ này bị lỗi hiện:(
                 <div class="link-description">không biết bạn thấy cái này bằng cách nào nữa:/</div>
             </div>
-            <img src="image1.jpg" alt="Image 1" class="link-image" width="50">
+            <img src="image1.jpg" alt="Image 1" class="link-image">
         </a>
         <a href="Gacha RNG 50.000!!!.html" class="link-item">
             <div class="link-text">
                 Cái này sau này sẽ để cái gì đó
                 <div class="link-description">test</div>
             </div>
-            <img src="image2.jpg" alt="Image 2" class="link-image" width="50">
+            <img src="image2.jpg" alt="Image 2" class="link-image">
         </a>
         <a href="txiu.html" class="link-item">
             <div class="link-text">
                 Tài Xỉu:)
                 <div class="link-description">không phải như cái tên</div>
             </div>
-            <img src="https://gamek.mediacdn.vn/133514250583805952/2020/12/8/photo-6-1607402067076104202952.jpg" alt="Image 3" class="link-image" width="50">
+            <img src="https://gamek.mediacdn.vn/133514250583805952/2020/12/8/photo-6-1607402067076104202952.jpg" alt="Image 3" class="link-image">
         </a>
         <a href="file4.html" class="link-item">
             <div class="link-text">
                 cái để số là chưa có gì đâu:v
                 <div class="link-description">Miêu tả cho file 4</div>
             </div>
-            <img src="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-down-glyph-black-icon-png-image_691473.jpg" alt="Image 4" class="link-image" width="50">
+            <img src="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-down-glyph-black-icon-png-image_691473.jpg" alt="Image 4" class="link-image">
         </a>
         <a href="Gacha RNG 50.000!!!.html" class="link-item">
             <div class="link-text">
                 Pet Ghacha RNG
                 <div class="link-description">Ghacha Time!</div>
             </div>
-            <img src="https://static.wikia.nocookie.net/roblox/images/3/3c/PETS_GO_-_Icon.png/revision/latest?cb=20241012202005" alt="Image 2" class="link-image" width="50">
+            <img src="https://static.wikia.nocookie.net/roblox/images/3/3c/PETS_GO_-_Icon.png/revision/latest?cb=20241012202005" alt="Image 2" class="link-image">
         </a>
         <a href="ai làm toán cấp 1.html" class="link-item">
             <div class="link-text">
                 Ai làm toán
                 <div class="link-description">giải được từng bước! (ai này mới học cấp 1)</div>
             </div>
-            <img src="https://static-media-cdn.mekongasean.vn/stores/news_dataimages/mekongaseanvn/012024/18/16/17sci-alphageometry-04-pljm-jumbo-6457.jpg" alt="Image 6" class="link-image" width="50">
+            <img src="https://static-media-cdn.mekongasean.vn/stores/news_dataimages/mekongaseanvn/012024/18/16/17sci-alphageometry-04-pljm-jumbo-6457.jpg" alt="Image 6" class="link-image">
         </a>
         <a href="file7.html" class="link-item">
             <div class="link-text">
                 7
                 <div class="link-description">Miêu tả cho file 7</div>
             </div>
-            <img src="image7.jpg" alt="Image 7" class="link-image" width="50">
+            <img src="image7.jpg" alt="Image 7" class="link-image">
         </a>
         <a href="file8.html" class="link-item">
             <div class="link-text">
                 8
                 <div class="link-description">Miêu tả cho file 8</div>
             </div>
-            <img src="image8.jpg" alt="Image 8" class="link-image" width="50">
+            <img src="image8.jpg" alt="Image 8" class="link-image">
         </a>
         <a href="file9.html" class="link-item">
             <div class="link-text">
                 9
                 <div class="link-description">Miêu tả cho file 9</div>
             </div>
-            <img src="image9.jpg" alt="Image 9" class="link-image" width="50">
+            <img src="image9.jpg" alt="Image 9" class="link-image">
         </a>
         <a href="file10.html" class="link-item">
             <div class="link-text">
                 10
                 <div class="link-description">Miêu tả cho file 10</div>
             </div>
-            <img src="image10.jpg" alt="Image 10" class="link-image" width="50">
+            <img src="image10.jpg" alt="Image 10" class="link-image">
         </a>
     </div>
 </body>
