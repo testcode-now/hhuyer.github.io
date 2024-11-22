@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI giải toán từng bước</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .warning {
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI giải toán từng bước</h1>
+        <input type="text" id="question" placeholder="chỉ số và '+-*/' thôi nhé">
+        <button onclick="getAnswer()">Tính toán</button>
+        <label>
+            <input type="checkbox" id="stepByStepToggle"> bật giải từng bước
+        </label>
+        <p id="answer"></p>
+        <p id="steps"></p>
+        <p class="warning">Sử dụng giải từng bước này trên một số câu hỏi phức tạp có thể dẫn tới treo máy</p>
+    </div>
+
+    <script>
+        function getAnswer() {
+            const question = document.getElementById('question').value;
+            const answerElement = document.getElementById('answer');
+            const stepsElement = document.getElementById('steps');
+            const stepByStepEnabled = document.getElementById('stepByStepToggle').checked;
+            try {
+                const answer = eval(question);
+                answerElement.textContent = `Đáp án: ${answer}`;
+                if (stepByStepEnabled) {
+                    stepsElement.textContent = 'Đang tính...(khả năng cao bị treo máy)';
+                    setTimeout(() => {
+                        stepsElement.innerHTML = `Các bước:<br>${getSteps(question).replace(/\n/g, '<br>')}`;
+                    }, 100); // Delay to prevent UI freezing
+                } else {
+                    stepsElement.textContent = '';
+                }
+            } catch (error) {
+                answerElement.textContent = 'Nhập sai ký tự hoặc có lỗi';
+                stepsElement.textContent = '';
+            }
+        }
+
+        function getSteps(question) {
+            const operators = ['*', '/', '+', '-'];
+            let steps = `Biểu thức ban đầu: ${question}\n`;
+            let currentExpression = question;
+
+            operators.forEach(operator => {
+                let regex = new RegExp(`(\\d+\\.?\\d*)\\s*\\${operator}\\s*(\\d+\\.?\\d*)`);
+                while (regex.test(currentExpression)) {
+                    currentExpression = currentExpression.replace(regex, (match, p1, p2) => {
+                        let result;
+                        let explanation;
+                        switch (operator) {
+                            case '*':
+                                result = parseFloat(p1) * parseFloat(p2);
+                                explanation = `${p1} * ${p2} = ${result}`;
+                                break;
+                            case '/':
+                                result = parseFloat(p1) / parseFloat(p2);
+                                explanation = `${p1} / ${p2} = ${result}`;
+                                break;
+                            case '+':
+                                result = parseFloat(p1) + parseFloat(p2);
+                                explanation = `${p1} + ${p2} = ${result}`;
+                                break;
+                            case '-':
+                                result = parseFloat(p1) - parseFloat(p2);
+                                explanation = `${p1} - ${p2} = ${result}`;
+                                break;
+                        }
+                        steps += `${currentExpression.replace(match, result)} (${explanation})\n`;
+                        return result;
+                    });
+                }
+            });
+
+            return steps.trim();
+        }
+    </script>
+</body>
+</html>
