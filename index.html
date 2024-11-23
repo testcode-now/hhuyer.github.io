@@ -99,6 +99,35 @@
       gtag('js', new Date());
 
       gtag('config', 'G-N6VRJ98QJD');
+document.addEventListener('DOMContentLoaded', () => {
+    const icon = document.getElementById('daily-login-icon');
+    const popup = document.getElementById('daily-login-popup');
+    const message = document.getElementById('daily-login-message');
+    const closeBtn = document.getElementById('daily-login-close');
+
+    const currentDay = new Date().toISOString().slice(0, 10);
+    const lastLogin = localStorage.getItem('lastLogin') || '';
+    let streak = parseInt(localStorage.getItem('streak') || '0');
+
+    if (currentDay !== lastLogin) {
+        if (lastLogin && new Date(lastLogin) < new Date(currentDay)) {
+            streak = 1;
+        } else {
+            streak++;
+        }
+        localStorage.setItem('lastLogin', currentDay);
+        localStorage.setItem('streak', streak);
+    }
+
+    icon.addEventListener('click', () => {
+        message.textContent = `Bạn đã nhận ${streak} kẹo hôm nay!`;
+        popup.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+});
 
       // Mảng các câu triết lý và tác giả
       const philosophies = [
@@ -147,6 +176,11 @@
       });
     </script>
 </head>
+<div id="daily-login-icon" style="position: fixed; bottom: 10px; right: 10px; width: 50px; height: 50px; background: url('https://hoidap247.com/static/img/dailyLogin/icon_check.png') no-repeat center/cover; cursor: pointer; border-radius: 50%; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);"></div>
+<div id="daily-login-popup" style="display: none; position: fixed; bottom: 70px; right: 10px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.3);">
+    <p id="daily-login-message"></p>
+    <button id="daily-login-close" style="margin-top: 10px; padding: 10px 20px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Đóng</button>
+</div>
 <body>
     <div class="philosophy" id="philosophy">
         <!-- Câu triết lý sẽ được hiển thị ở đây -->
@@ -162,7 +196,7 @@
             </div>
             <img src="https://giaidap.vn/wp-content/uploads/2023/10/Soa%CC%A3n-va%CC%86n-1.jpg" alt="Image 1" class="link-image">
         </a>
-        <a href="Gacha RNG 50.000!!!.html" class="link-item">
+        <a href="petspin.html" class="link-item">
             <div class="link-text">
                 Cái này sau này sẽ để cái gì đó
                 <div class="link-description">Test</div>
@@ -188,7 +222,7 @@
                 Pet Ghacha RNG
                 <div class="link-description">Ghacha Time!</div>
             </div>
-            <img src="https://static.wikia.nocookie.net/roblox/images/3/3c/PETS_GO_-_Icon.png/revision/latest?cb=20241012202005" alt="Image 2" class="link-image">
+            <img src="https://tr.rbxcdn.com/180DAY-179e85cbb13c24dddd7b80f476ce7705/768/432/Image/Webp/noFilter" alt="Image 2" class="link-image">
         </a>
         <a href="ai làm toán cấp 1.html" class="link-item">
             <div class="link-text">
