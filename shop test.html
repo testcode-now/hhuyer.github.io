@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sử dụng tiền</title>
+    <script>
+        window.onload = function () {
+            const savedMoney = parseInt(localStorage.getItem('money')) || 0;
+            document.getElementById('money').innerText = savedMoney;
+        };
+
+        function spendMoney(amount) {
+            let currentMoney = parseInt(localStorage.getItem('money')) || 0;
+            if (currentMoney >= amount) {
+                currentMoney -= amount;
+                localStorage.setItem('money', currentMoney);
+                document.getElementById('money').innerText = currentMoney;
+                alert(`Đã tiêu ${amount} tiền.`);
+            } else {
+                alert("Không đủ tiền!");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <h1>Số tiền hiện tại: <span id="money">0</span></h1>
+    </div>
+    <button onclick="spendMoney(50)">Tiêu 50 tiền</button>
+</body>
+</html>
