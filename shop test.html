@@ -6,6 +6,7 @@
     <title>Sử dụng tiền</title>
     <script>
         window.onload = function () {
+            // Lấy số tiền từ localStorage
             const savedMoney = parseInt(localStorage.getItem('money')) || 0;
             document.getElementById('money').innerText = savedMoney;
         };
@@ -14,12 +15,16 @@
             let currentMoney = parseInt(localStorage.getItem('money')) || 0;
             if (currentMoney >= amount) {
                 currentMoney -= amount;
-                localStorage.setItem('money', currentMoney);
+                localStorage.setItem('money', currentMoney); // Cập nhật vào localStorage
                 document.getElementById('money').innerText = currentMoney;
                 alert(`Đã tiêu ${amount} tiền.`);
             } else {
                 alert("Không đủ tiền!");
             }
+        }
+
+        function goBackToGacha() {
+            window.location.href = "Gacha RNG 50.000!!!.html"; // Đường dẫn đến file Gacha RNG
         }
     </script>
 </head>
@@ -28,5 +33,8 @@
         <h1>Số tiền hiện tại: <span id="money">0</span></h1>
     </div>
     <button onclick="spendMoney(50)">Tiêu 50 tiền</button>
+    <br><br>
+    <!-- Nút quay lại -->
+    <button onclick="goBackToGacha()">Quay lại Gacha RNG</button>
 </body>
 </html>
