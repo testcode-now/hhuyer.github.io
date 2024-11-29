@@ -196,7 +196,7 @@
         <h1>Trình Tạo Thú Cưng Ngẫu Nhiên</h1>
         <p>Nhấn nút để nhận thú cưng ngẫu nhiên:</p>
         <div class="generate-button" onclick="generateRandomPet()">
-            <img src="https://static.wikia.nocookie.net/pets-go/images/a/ad/Dice_Icon.png/revision/latest?cb=20241011202906" alt="Dice Icon" class="dice-icon">
+            <img src="https://pbs.twimg.com/media/GUmOAlVWkAEyiRC.png" alt="Dice Icon" class="dice-icon">
         </div>
         <p id="result"></p>
         <img id="pet-image" class="pet-image" src="" alt="Pet Image">
@@ -214,7 +214,7 @@
             <h2>Thú Cưng Đã Nhận</h2>
             <div id="money-container">
                 <span id="money">0</span>
-                <img id="money-image" src="https://static.wikia.nocookie.net/pets-go/images/6/6d/Coin.png/revision/latest?cb=20241012192540" alt="icon tiền" style="width: 24px; height: 24px; margin-left: 5px;">
+                <img id="money-image" src="https://i.ibb.co/8X276fY/Coin.webp" alt="icon tiền" style="width: 24px; height: 24px; margin-left: 5px;">
             </div>
             <button class="info-button" onclick="showInfoModal()"></button>
         </div>
@@ -693,7 +693,7 @@
         function updateSpinCount() {
             document.getElementById('spin-count').innerText = `Tổng số lần quay: ${spinCount}`;
             const nextLuck = 10 - (spinCount % 10);
-            document.getElementById('next-luck').innerHTML = `Số lần quay đến khi tăng may mắn tiếp theo: ${nextLuck} <img src="https://static.wikia.nocookie.net/pets-go/images/9/9e/Golden_Dice_Icon.png/revision/latest?cb=20241027164353" alt="Luck Icon" class="luck-icon">`;
+            document.getElementById('next-luck').innerHTML = `Số lần quay đến khi tăng may mắn tiếp theo: ${nextLuck} <img src="https://pbs.twimg.com/media/GUmOAk8WMAEqeun.png" alt="Luck Icon" class="luck-icon">`;
         }
 
         function normalizeCode(input) {
