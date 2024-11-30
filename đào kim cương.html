@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines Gambling Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .controls img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .controls img:hover {
+            transform: scale(1.2);
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .cell:hover {
+            transform: scale(1.5);
+        }
+        .cell img {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        .cell.mine img {
+            display: block;
+        }
+        .cell.safe img {
+            display: block;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            transition: visibility 0.3s, opacity 0.3s;
+            opacity: 0;
+        }
+        .overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .modal button:hover {
+            background-color: #ddd;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .bet-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .bet-controls input, .bet-controls select {
+            margin: 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .bet-controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .bet-controls button:hover {
+            background-color: #ddd;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <img id="themeToggle" src="https://www.vmcdn.ca/f/files/stalberttoday/0624-scistalsunmoon-sup.jpg" alt="Toggle Theme">
+        <img id="homeButton" src="https://www.freeiconspng.com/thumbs/exit-icon/exit-icon-png-close-0.png" alt="Home">
+    </div>
+    <div class="bet-controls">
+        <label for="betAmount">Đặt (Kẹo):</label>
+        <input type="number" id="betAmount" min="1" value="10">
+        <label for="minesCount">Chọn số lượng mìn:</label>
+        <select id="minesCount">
+            <option value="random">Ngẫu nhiên</option>
+            ${Array.from({ length: 24 }, (_, i) => `<option value="${i + 1}">lỗi cần sửa</option>`).join('')}
+        </select>
+        <button id="startGameButton">Bắt đầu trò chơi</button>
+    </div>
+    <div class="game-board" id="gameBoard"></div>
+    <div class="message" id="message">Số lượng mìn: ?</div>
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <div id="resultMessage"></div>
+            <button id="playAgainButton">Chơi lại</button>
+        </div>
+    </div>
+
+    <script>
+        const gameBoard = document.getElementById('gameBoard');
+        const message = document.getElementById('message');
+        const overlay = document.getElementById('overlay');
+        const resultMessage = document.getElementById('resultMessage');
+        const playAgainButton = document.getElementById('playAgainButton');
+        const themeToggle = document.getElementById('themeToggle');
+        const homeButton = document.getElementById('homeButton');
+        const homeButtonModal = document.getElementById('homeButtonModal');
+        const startGameButton = document.getElementById('startGameButton');
+        const betAmountInput = document.getElementById('betAmount');
+        const minesCountSelect = document.getElementById('minesCount');
+        const rows = 5;
+        const cols = 5;
+        let minesCount = 1;
+        let betAmount = 10;
+        let mines = [];
+        let safeCells = 0;
+        let gameStarted = false;
+
+        function initGame() {
+            mines = [];
+            safeCells = 0;
+            gameBoard.innerHTML = '';
+            message.innerHTML = `Số lượng mìn: ${gameStarted ? minesCount : '?'}`;
+            overlay.classList.remove('visible');
+            for (let i = 0; i < rows * cols; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                const img = document.createElement('img');
+                img.src = 'https://i.ibb.co/SP4wdZb/Screenshot-2024-11-30-211516-removebg-preview.png'; // Đường dẫn đến hình ảnh kim cương
+                cell.appendChild(img);
+                cell.addEventListener('click', () => revealCell(cell, i));
+                gameBoard.appendChild(cell);
+            }
+            placeMines();
+        }
+
+        function placeMines() {
+            const selectedValue = minesCountSelect.value;
+            if (selectedValue === 'random') {
+                minesCount = Math.floor(Math.random() * 24) + 1; // Số mìn ngẫu nhiên từ 1 đến 24
+            } else {
+                minesCount = parseInt(selectedValue);
+            }
+            while (mines.length < minesCount) {
+                const mineIndex = Math.floor(Math.random() * rows * cols);
+                if (!mines.includes(mineIndex)) {
+                    mines.push(mineIndex);
+                }
+            }
+        }
+
+        function revealCell(cell, index) {
+            if (!gameStarted) return;
+            const img = cell.querySelector('img');
+            if (mines.includes(index)) {
+                img.src = 'https://i.ibb.co/tD8YZmf/Screenshot-2024-11-30-213457-removebg-preview.png'; // Đường dẫn đến hình ảnh mìn
+                cell.classList.add('mine');
+                showMessage(false);
+            } else {
+                cell.classList.add('safe');
+                safeCells++;
+                if (safeCells === rows * cols - minesCount) {
+                    showMessage(true);
+                }
+            }
+        }
+
+        function showMessage(isWin) {
+            const totalCells = rows * cols;
+            const safeRatio = safeCells / (totalCells - minesCount);
+            const multiplier = calculateMultiplier(minesCount, safeCells);
+            const winnings = betAmount * multiplier;
+            let ratioText = `x${multiplier.toFixed(2)}`;
+            if (multiplier > 1) {
+                resultMessage.style.color = 'green';
+                resultMessage.innerHTML = `Bạn đã đào trúng bom! ${ratioText} - ${winnings.toFixed(2)} Kẹo`;
+            } else {
+                resultMessage.style.color = 'red';
+                resultMessage.innerHTML = `Bạn đã thua! ${ratioText} - Bạn đã mất ${(betAmount * (1 - multiplier)).toFixed(2)} Kẹo`;
+            }
+            overlay.classList.add('visible');
+        }
+
+        function calculateMultiplier(minesCount, safeCells) {
+            // Công thức tính hệ số nhân có thể thay đổi tùy theo yêu cầu cụ thể
+            return (safeCells / (rows * cols - minesCount)) * (25 / minesCount);
+        }
+
+        startGameButton.addEventListener('click', () => {
+            betAmount = parseFloat(betAmountInput.value);
+            gameStarted = true;
+            initGame();
+        });
+
+        playAgainButton.addEventListener('click', () => {
+            gameStarted = false;
+            initGame();
+        });
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.src = document.body.classList.contains('dark-mode') ? 'https://i.ibb.co/PGnwV3k/day-night-mode-switch-sun-moon-button-97458-444.png' : 'https://i.ibb.co/0GQzy5s/day-night-mode-switch-sun-moon-button-97458-4444.png';
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        homeButton.addEventListener('click', () => {
+            window.location.href = 'indexgame.html'; // Thay đổi URL này thành trang chính của bạn
+        });
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.src = 'moon.png';
+            }
+        });
+
+        initGame();
+    </script>
+</body>
+</html>
