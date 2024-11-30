@@ -14,7 +14,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background-color: white;
@@ -29,6 +29,34 @@
 
         .section {
             margin-bottom: 30px;
+        }
+
+        .currency-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #eef2ff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .currency-box span {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .currency-box button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .currency-box button:hover {
+            background-color: #0056b3;
         }
 
         .game-item {
@@ -61,67 +89,66 @@
             background-color: #45a049;
         }
 
-        .currency-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #eef2ff;
-            border-radius: 8px;
+        .alert {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
             margin-bottom: 20px;
-        }
-
-        .currency-box span {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .currency-box button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
+            border: 1px solid #f5c6cb;
             border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .currency-box button:hover {
-            background-color: #0056b3;
         }
     </style>
     <script>
-        // Quản lý tiền và kẹo
-        let coins = parseInt(localStorage.getItem('coins')) || 0;
-        let candies = parseInt(localStorage.getItem('candies')) || 0;
+        let coins = 0; // Số xu
+        let candies = parseInt(localStorage.getItem('candies')) || 0; // Số kẹo
 
+        // Hàm khởi động: Tải số tiền từ localStorage
+        function loadSavedData() {
+            coins = parseInt(localStorage.getItem('money')) || 0; // Đọc số tiền từ khóa 'money'
+            document.getElementById('coin-count').innerText = coins; // Cập nhật UI
+            document.getElementById('candy-count').innerText = candies;
+        }
+
+        // Hàm đổi kẹo
+        function exchangeCandy() {
+            const alertBox = document.getElementById('alert-box'); // Vùng thông báo
+            alertBox.style.display = 'none'; // Ẩn thông báo mặc định
+
+            if (coins >= 100) {
+                coins -= 100;
+                candies += 1;
+                localStorage.setItem('money', coins); // Lưu lại số tiền
+                localStorage.setItem('candies', candies); // Lưu số kẹo
+                updateUI();
+            } else {
+                alertBox.style.display = 'block';
+                alertBox.innerText =
+                    'Bạn không có đủ xu để đổi kẹo. Hãy chơi trò "Quay thú cưng ngẫu nhiên" để kiếm thêm xu!';
+            }
+        }
+
+        // Hàm cập nhật UI
         function updateUI() {
             document.getElementById('coin-count').innerText = coins;
             document.getElementById('candy-count').innerText = candies;
         }
 
-        function exchangeCandy() {
-            if (coins >= 100) {
-                coins -= 100;
-                candies += 1;
-                localStorage.setItem('coins', coins);
-                localStorage.setItem('candies', candies);
-                updateUI();
-                alert('Bạn đã đổi 100 xu lấy 1 kẹo!');
-            } else {
-                alert('Bạn không đủ xu để đổi kẹo.');
-            }
-        }
-
+        // Điều hướng tới trò chơi
         function goToGame(link) {
             window.location.href = link;
         }
 
-        window.onload = updateUI;
+        // Gọi hàm khởi động khi tải trang
+        window.onload = loadSavedData;
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Trung tâm trò chơi</h1>
+
+        <!-- Thông báo -->
+        <div id="alert-box" class="alert"></div>
 
         <!-- Phần kiếm xu và đổi kẹo -->
         <div class="section">
@@ -136,11 +163,7 @@
         <div class="section">
             <h2>Danh sách trò chơi</h2>
             <div class="game-item">
-                <span>Trò chơi 1: Game đơn giản</span>
-                <button onclick="goToGame('game1.html')">Chơi ngay</button>
-            </div>
-            <div class="game-item">
-                <span>Trò chơi 2: Gacha</span>
+                <span>Trò chơi 2: Quay thú cưng ngẫu nhiên</span>
                 <button onclick="goToGame('Gacha RNG 50.000!!!.html')">Chơi ngay</button>
             </div>
             <div class="game-item">
