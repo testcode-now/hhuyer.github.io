@@ -55,18 +55,6 @@
             margin-bottom: 20px;
         }
 
-        /* Phần thông báo */
-        .alert {
-            display: none;
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-            border-radius: 5px;
-        }
-
-        /* Phần xu và kẹo */
         .currency-box {
             display: flex;
             align-items: center;
@@ -97,7 +85,6 @@
             background-color: #0056b3;
         }
 
-        /* Danh sách trò chơi */
         .game-item {
             display: flex;
             align-items: center;
@@ -126,6 +113,82 @@
 
         .game-item button:hover {
             background-color: #45a049;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            padding: 20px;
+            z-index: 1000;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-ok {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-ok:hover {
+            background-color: #45a049;
+        }
+
+        .btn-cancel:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Thông báo lỗi */
+        .alert {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
         }
     </style>
     <script>
@@ -162,6 +225,38 @@
             document.getElementById('candy-count').innerText = candies;
         }
 
+        // Hàm mở modal
+        function openModal(gameLink) {
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('modal');
+
+            overlay.style.display = 'block';
+            modal.style.display = 'block';
+
+            // Xử lý khi bấm "OK"
+            document.getElementById('btn-ok').onclick = () => {
+                if (candies > 0) {
+                    candies -= 1; // Trừ 1 kẹo
+                    localStorage.setItem('candies', candies); // Lưu lại
+                    updateUI();
+                    closeModal();
+                    window.location.href = gameLink; // Chuyển tới trò chơi
+                } else {
+                    alert('Bạn không đủ kẹo để chơi. Hãy đổi thêm kẹo trước!');
+                    closeModal();
+                }
+            };
+        }
+
+        // Hàm đóng modal
+        function closeModal() {
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('modal');
+
+            overlay.style.display = 'none';
+            modal.style.display = 'none';
+        }
+
         // Tự động cập nhật số xu mỗi giây
         setInterval(() => {
             coins = parseInt(localStorage.getItem('money')) || 0;
@@ -181,8 +276,8 @@
     <div class="container">
         <h1>Trung tâm trò chơi</h1>
 
-        <!-- Thông báo -->
-        <div id="alert-box" class="alert" style="display: none;"></div>
+        <!-- Thông báo lỗi -->
+        <div id="alert-box" class="alert"></div>
 
         <!-- Phần kiếm xu và đổi kẹo -->
         <div class="section">
@@ -212,6 +307,16 @@
                 <span>Trò chơi 4: Tài Xỉu</span>
                 <button onclick="openModal('txiu.html')">Chơi ngay</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận -->
+    <div id="overlay" class="overlay"></div>
+    <div id="modal" class="modal">
+        <div class="modal-header">Bạn có muốn chơi với giá 1 kẹo không?</div>
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeModal()">Không</button>
+            <button id="btn-ok" class="btn-ok">OK</button>
         </div>
     </div>
 </body>
