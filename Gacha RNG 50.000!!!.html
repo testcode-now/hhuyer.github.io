@@ -4,190 +4,249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trình Tạo Thú Cưng Ngẫu Nhiên</title>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            margin: 0;
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        margin: 0;
+    }
+    .container {
+        text-align: center;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 90%;
+    }
+    .generate-button {
+        position: relative;
+        margin-top: 20px;
+        cursor: pointer;
+        background: #00ff00; /* Màu xanh lá cây tươi để tăng độ tương phản */
+        border: none;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Thêm bóng để tăng sự nổi bật */
+    }
+    .generate-button:hover {
+        background: #00cc00; /* Màu xanh lá cây đậm hơn khi hover */
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.7); /* Tăng bóng khi hover */
+    }
+    .dice-icon {
+        width: 50px;
+        height: 50px;
+    }
+    .countdown-bar {
+        width: 100%;
+        height: 10px;
+        background-color: #4caf50;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        transition: width 2s linear;
+    }
+    .history {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-height: 400px;
+        overflow-y: auto;
+        margin-top: 20px;
+        width: 100%;
+        position: relative;
+    }
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .info-button {
+        width: 30px;
+        height: 30px;
+        background: url('https://static.thenounproject.com/png/2392586-200.png') no-repeat center center;
+        background-size: cover;
+        cursor: pointer;
+        border: none;
+        border-radius: 50%;
+    }
+    .info-modal, .pet-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        display: none;
+    }
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 90%;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    input[type="text"] {
+        padding: 10px;
+        margin-top: 20px;
+        font-size: 16px;
+        width: calc(100% - 22px);
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    button {
+        padding: 10px 20px;
+        margin-top: 10px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #money-container {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+    }
+    .coin {
+        position: absolute;
+        font-size: 20px;
+        animation: fly 1s ease-out forwards;
+    }
+    @keyframes fly {
+        0% {
+            opacity: 1;
+            transform: translateY(0);
         }
+        100% {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+    }
+    .pet-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        margin-top: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .luck-icon {
+        width: 20px;
+        height: 20px;
+        margin-left: 5px;
+    }
+
+    /* Media Query cho thiết bị nhỏ */
+    @media (max-width: 600px) {
         .container {
-            text-align: center;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            margin: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 90%;
-        }
-        .generate-button {
-            position: relative;
-            margin-top: 20px;
-            cursor: pointer;
-            background: #00ff00; /* Màu xanh lá cây tươi để tăng độ tương phản */
-            border: none;
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Thêm bóng để tăng sự nổi bật */
-        }
-        .generate-button:hover {
-            background: #00cc00; /* Màu xanh lá cây đậm hơn khi hover */
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7); /* Tăng bóng khi hover */
-        }
-        .dice-icon {
-            width: 50px;
-            height: 50px;
-        }
-        .countdown-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #4caf50;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            transition: width 2s linear;
-        }
-        .history {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-height: 400px;
-            overflow-y: auto;
-            margin-top: 20px;
-            width: 100%;
-            position: relative;
-        }
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .info-button {
-            width: 30px;
-            height: 30px;
-            background: url('https://static.thenounproject.com/png/2392586-200.png') no-repeat center center;
-            background-size: cover;
-            cursor: pointer;
-            border: none;
-            border-radius: 50%;
-        }
-        .info-modal, .pet-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            display: none;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 90%;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        input[type="text"] {
             padding: 10px;
-            margin-top: 20px;
-            font-size: 16px;
-            width: calc(100% - 22px);
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            font-size: 16px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #money-container {
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-        }
-        .coin {
-            position: absolute;
-            font-size: 20px;
-            animation: fly 1s ease-out forwards;
-        }
-        @keyframes fly {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
+            margin: 10px;
         }
         .pet-image {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            margin-top: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 60px;
+            height: 60px;
         }
-        .luck-icon {
-            width: 20px;
-            height: 20px;
-            margin-left: 5px;
+        input[type="text"] {
+            font-size: 14px;
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-                margin: 10px;
-            }
-            .pet-image {
-                width: 60px;
-                height: 60px;
-            }
-            input[type="text"] {
-                font-size: 14px;
-            }
-            #money-container {
-                font-size: 20px;
-            }
+        #money-container {
+            font-size: 20px;
         }
-    </style>
+    }
+
+    /* CSS cho bảng thông báo */
+    .notification {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    .modal {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 400px;
+        box-sizing: border-box;
+    }
+
+    .modal img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .modal h2 {
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+
+    .modal p {
+        margin-bottom: 20px;
+        font-size: 1em;
+    }
+
+    .modal button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+    .modal button:hover {
+        background-color: #45a049;
+    }
+</style>
 </head>
 <body>
     <div class="container">
@@ -203,8 +262,8 @@
         <p id="next-luck"></p>
         <div class="countdown-bar" id="countdown-bar"></div>
         <div>
-            <input type="text" id="code-input" placeholder="Nhập mã" oninput="normalizeCode(this)">
-            <button onclick="submitCode()">Gửi mã</button>
+<input type="text" id="code-input" placeholder="Nhập mã đổi thưởng" oninput="normalizeCode(this)">
+<button onclick="submitCode()">Đổi thưởng</button>
         </div>
     </div>
     <div class="history">
@@ -501,283 +560,318 @@
     { name: 'Hide the Pain Harold shiny', probability: 1/30000000, image: 'https://example.com/hidethepainharold.png' },
     { name: 'Philosoraptor shiny', probability: 1/31000000, image: 'https://example.com/philosoraptor.png' }
         ];
+let spinCount = 0;
+let isGenerating = false;
+let money = 0;
+let luckMultiplier = 1; // Biến để lưu trữ độ may mắn
+let totalCoins = 0; // Tổng số coin đã có từ trước đến nay
+let bestRandom = 0; // Lần random may nhất
+let totalTimePlayed = 0; // Tổng thời gian đã chơi từ trước đến nay
+let startTime = Date.now(); // Thời gian bắt đầu chơi
 
-        let spinCount = 0;
-        let isGenerating = false;
-        let money = 0;
-        let luckMultiplier = 1; // Biến để lưu trữ độ may mắn
-        let totalCoins = 0; // Tổng số coin đã có từ trước đến nay
-        let bestRandom = 0; // Lần random may nhất
-        let totalTimePlayed = 0; // Tổng thời gian đã chơi từ trước đến nay
-        let startTime = Date.now(); // Thời gian bắt đầu chơi
+// Load data from localStorage
+window.onload = function() {
+    loadSavedData();
+    // Nếu chưa có thông tin lưu trữ trong localStorage, gọi hàm để thông báo lần đầu
+    if (!localStorage.getItem('lastVisit')) {
+        showDailyNotification();
+    }
+};
 
-        // Load data from localStorage
-        window.onload = function() {
-            loadSavedData();
-        };
+function loadSavedData() {
+    const savedPets = JSON.parse(localStorage.getItem('petsHistory')) || [];
+    const savedMoney = parseInt(localStorage.getItem('money')) || 0;
+    const savedSpinCount = parseInt(localStorage.getItem('spinCount')) || 0;
+    const savedTotalCoins = parseInt(localStorage.getItem('totalCoins')) || 0;
+    const savedBestRandom = parseInt(localStorage.getItem('bestRandom')) || 0;
+    const savedTotalTimePlayed = parseInt(localStorage.getItem('totalTimePlayed')) || 0;
 
-        function loadSavedData() {
-            const savedPets = JSON.parse(localStorage.getItem('petsHistory')) || [];
-            const savedMoney = parseInt(localStorage.getItem('money')) || 0;
-            const savedSpinCount = parseInt(localStorage.getItem('spinCount')) || 0;
-            const savedTotalCoins = parseInt(localStorage.getItem('totalCoins')) || 0;
-            const savedBestRandom = parseInt(localStorage.getItem('bestRandom')) || 0;
-            const savedTotalTimePlayed = parseInt(localStorage.getItem('totalTimePlayed')) || 0;
+    money = savedMoney;
+    spinCount = savedSpinCount;
+    totalCoins = savedTotalCoins;
+    bestRandom = savedBestRandom;
+    totalTimePlayed = savedTotalTimePlayed;
 
-            money = savedMoney;
-            spinCount = savedSpinCount;
-            totalCoins = savedTotalCoins;
-            bestRandom = savedBestRandom;
-            totalTimePlayed = savedTotalTimePlayed;
-            document.getElementById('money').innerText = money;
-            document.getElementById('spin-count').innerText = `Tổng số lần quay: ${spinCount}`;
+    document.getElementById('money').innerText = money;
+    document.getElementById('spin-count').innerText = `Tổng số lần quay: ${spinCount}`;
 
-            savedPets.forEach(pet => {
-                addPetToHistory(pet.name, pet.probability, pet.image);
-            });
+    savedPets.forEach(pet => {
+        addPetToHistory(pet.name, pet.probability, pet.image);
+    });
 
-            updateSpinCount();
+    updateSpinCount();
+}
+
+function saveData() {
+    const petsHistory = [];
+    const tableBody = document.getElementById('history-table').getElementsByTagName('tbody')[0];
+    for (let i = 0; i < tableBody.rows.length; i++) {
+        const row = tableBody.rows[i];
+        petsHistory.push({
+            name: row.cells[0].innerText,
+            probability: parseInt(row.cells[1].innerText.split(' ')[2]),
+            image: row.cells[2].querySelector('button').dataset.image
+        });
+    }
+
+    localStorage.setItem('petsHistory', JSON.stringify(petsHistory));
+    localStorage.setItem('money', money);
+    localStorage.setItem('spinCount', spinCount);
+    localStorage.setItem('totalCoins', totalCoins);
+    localStorage.setItem('bestRandom', bestRandom);
+    localStorage.setItem('totalTimePlayed', totalTimePlayed);
+}
+
+// Hiển thị bảng thông báo khi truy cập lần đầu trong ngày
+function showDailyNotification() {
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.top = '0';
+    notification.style.left = '0';
+    notification.style.width = '100%';
+    notification.style.height = '100%';
+    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    notification.style.display = 'flex';
+    notification.style.justifyContent = 'center';
+    notification.style.alignItems = 'center';
+    notification.style.zIndex = '1000';
+
+    const modal = document.createElement('div');
+    modal.style.backgroundColor = 'white';
+    modal.style.borderRadius = '10px';
+    modal.style.padding = '20px';
+    modal.style.textAlign = 'center';
+    modal.style.maxWidth = '80%';
+    modal.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    modal.style.display = 'flex';
+    modal.style.flexDirection = 'column';
+    modal.style.justifyContent = 'center';  // Căn giữa
+    modal.style.alignItems = 'center';  // Căn giữa
+
+    const title = document.createElement('h2');
+    title.style.marginBottom = '10px';
+    title.style.fontWeight = 'bold';
+    title.innerText = 'Chào mừng bạn trở lại!';
+
+    const message = document.createElement('p');
+    message.style.marginBottom = '20px';
+    message.innerText = 'Hãy cùng quay hôm nay để nhận thú cưng giới hạn!';
+
+    const image = document.createElement('img');
+    image.src = 'https://static.toiimg.com/thumb/msid-115690235,width-400,resizemode-4/115690235.jpg';
+    image.style.maxWidth = '100%';
+    image.style.borderRadius = '10px';
+    image.style.marginBottom = '20px';
+
+    const okButton = document.createElement('button');
+    okButton.style.padding = '10px 20px';
+    okButton.style.backgroundColor = '#4caf50';
+    okButton.style.color = 'white';
+    okButton.style.border = 'none';
+    okButton.style.borderRadius = '5px';
+    okButton.style.cursor = 'pointer';
+    okButton.style.fontSize = '1em';
+    okButton.innerText = 'OK';
+    okButton.onclick = function() {
+        notification.remove();
+    };
+
+    modal.appendChild(title);
+    modal.appendChild(message);
+    modal.appendChild(image);
+    modal.appendChild(okButton);
+    notification.appendChild(modal);
+    document.body.appendChild(notification);
+
+    // Lưu lại ngày truy cập để thông báo không hiển thị lại trong ngày
+    localStorage.setItem('lastVisit', new Date().toDateString());
+}
+
+// Lưu lại khi tạo thú cưng
+function generateRandomPet() {
+    if (isGenerating) return;
+    isGenerating = true;
+
+    document.getElementById('result').innerText = 'Đang tạo...';
+    document.getElementById('probability').innerText = '';
+
+    const countdownBar = document.getElementById('countdown-bar');
+    countdownBar.style.transition = 'none';
+    countdownBar.style.width = '100%';
+    setTimeout(() => {
+        countdownBar.style.transition = 'width 2s linear';
+        countdownBar.style.width = '0%';
+    }, 10);
+
+    let countdown = 2;
+    let intervalTime = 100;
+    const interval = setInterval(() => {
+        const randomPet = pets[Math.floor(Math.random() * pets.length)];
+        document.getElementById('result').innerText = `Đang ngẫu nhiên: ${randomPet.name}`;
+        countdown -= 0.1;
+        intervalTime += 50;
+        if (countdown <= 0) {
+            clearInterval(interval);
+            showFinalPet();
+            isGenerating = false;
         }
+    }, intervalTime);
+}
 
-        function saveData() {
-            const petsHistory = [];
-            const tableBody = document.getElementById('history-table').getElementsByTagName('tbody')[0];
-            for (let i = 0; i < tableBody.rows.length; i++) {
-                const row = tableBody.rows[i];
-                petsHistory.push({
-                    name: row.cells[0].innerText,
-                    probability: parseInt(row.cells[1].innerText.split(' ')[2]),
-                    image: row.cells[2].querySelector('button').dataset.image
-                });
+// Chức năng hiển thị thú cưng cuối cùng và lưu thông tin
+function showFinalPet() {
+    spinCount++;
+    let selectedPet = '';
+    let selectedProbability = 0;
+    let selectedImage = '';
+    let luckFactor = (1 + Math.floor(spinCount / 10) * 0.1 + Math.floor(spinCount / 100) * 1 + Math.floor(spinCount / 1000) * 10) * luckMultiplier;
+
+    while (!selectedPet) {
+        const random = Math.random() * luckFactor;
+        let cumulativeProbability = 0;
+
+        for (const pet of pets) {
+            cumulativeProbability += pet.probability;
+            if (random < cumulativeProbability) {
+                selectedPet = pet.name;
+                selectedProbability = Math.round(1 / pet.probability);
+                selectedImage = pet.image;
+                break;
             }
-            localStorage.setItem('petsHistory', JSON.stringify(petsHistory));
-            localStorage.setItem('money', money);
-            localStorage.setItem('spinCount', spinCount);
-            localStorage.setItem('totalCoins', totalCoins);
-            localStorage.setItem('bestRandom', bestRandom);
-            localStorage.setItem('totalTimePlayed', totalTimePlayed);
         }
+    }
 
-        function generateRandomPet() {
-            if (isGenerating) return;
-            isGenerating = true;
+    document.getElementById('result').innerText = `Bạn nhận được: ${selectedPet}`;
+    document.getElementById('probability').innerText = `Xác suất: 1 trong ${selectedProbability}`;
+    document.getElementById('pet-image').src = selectedImage;
+    addPetToHistory(selectedPet, selectedProbability, selectedImage);
+    updateSpinCount();
+    addMoney(selectedProbability);
+    saveData(); // Lưu dữ liệu sau khi tạo thú cưng
 
-            document.getElementById('result').innerText = 'Đang tạo...';
-            document.getElementById('probability').innerText = '';
+    // Cập nhật lần random may nhất
+    if (bestRandom === 0 || selectedProbability > bestRandom) {
+        bestRandom = selectedProbability;
+    }
+}
 
-            const countdownBar = document.getElementById('countdown-bar');
-            countdownBar.style.transition = 'none';
-            countdownBar.style.width = '100%';
+// Thêm thú cưng vào lịch sử
+function addPetToHistory(pet, probability, image) {
+    const tableBody = document.getElementById('history-table').getElementsByTagName('tbody')[0];
+    let found = false;
+
+    for (let i = 0; i < tableBody.rows.length; i++) {
+        const row = tableBody.rows[i];
+        if (row.cells[0].innerText.includes(pet)) {
+            const count = parseInt(row.cells[0].innerText.split(' x')[1] || 1) + 1;
+            row.cells[0].innerText = `${pet} x${count}`;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        const newRow = tableBody.insertRow();
+        const petCell = newRow.insertCell(0);
+        const probabilityCell = newRow.insertCell(1);
+        const infoCell = newRow.insertCell(2);
+        petCell.innerText = pet;
+        probabilityCell.innerText = `1 trong ${probability}`;
+        const infoButton = document.createElement('button');
+        infoButton.innerText = 'ℹ️';
+        infoButton.dataset.image = image;
+        infoButton.onclick = () => showPetModal(pet, probability, image);
+        infoCell.appendChild(infoButton);
+    }
+}
+
+// Cập nhật số lần quay
+function updateSpinCount() {
+    document.getElementById('spin-count').innerText = `Tổng số lần quay: ${spinCount}`;
+    const nextLuck = 10 - (spinCount % 10);
+    document.getElementById('next-luck').innerHTML = `Số lần quay đến khi tăng may mắn tiếp theo: ${nextLuck} <img src="https://pbs.twimg.com/media/GUmOAk8WMAEqeun.png" alt="Luck Icon" class="luck-icon">`;
+}
+
+// Thêm tiền vào tài khoản người chơi
+function addMoney(probability) {
+    const coins = probability; // Số xu nhận được bằng với độ hiếm của pet
+    money += coins;
+    totalCoins += coins;
+    document.getElementById('money').innerText = money;
+
+    // Chỉ hiển thị hiệu ứng tiền bay lên nếu độ hiếm nhỏ hơn 1 trong 600
+    if (probability < 600) {
+        for (let i = 0; i < coins; i++) {
+            const coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.innerText = '🪙'; // Thay thế bằng icon tiền của bạn
+            document.body.appendChild(coin);
+            coin.style.left = `${Math.random() * 100}%`;
             setTimeout(() => {
-                countdownBar.style.transition = 'width 2s linear';
-                countdownBar.style.width = '0%';
-            }, 10);
-
-            let countdown = 2;
-            let intervalTime = 100;
-            const interval = setInterval(() => {
-                const randomPet = pets[Math.floor(Math.random() * pets.length)];
-                document.getElementById('result').innerText = `Đang ngẫu nhiên: ${randomPet.name}`;
-                countdown -= 0.1;
-                intervalTime += 50;
-                if (countdown <= 0) {
-                    clearInterval(interval);
-                    showFinalPet();
-                    isGenerating = false;
-                }
-            }, intervalTime);
-
-            // Check if the godspeedrandom code is active
-            if (document.getElementById('countdown-bar').style.transition === 'width 0.2s linear') {
-                clearInterval(interval);
-                setTimeout(() => {
-                    showFinalPet();
-                    isGenerating = false;
-                }, 200);
-            }
+                coin.remove();
+            }, 1000);
         }
+    }
 
-        function showFinalPet() {
-            spinCount++;
-            let selectedPet = '';
-            let selectedProbability = 0;
-            let selectedImage = '';
-            let luckFactor = (1 + Math.floor(spinCount / 10) * 0.1 + Math.floor(spinCount / 100) * 1 + Math.floor(spinCount / 1000) * 10) * luckMultiplier;
+    saveData(); // Save data after adding money
+}
 
-            while (!selectedPet) {
-                const random = Math.random() * luckFactor;
-                let cumulativeProbability = 0;
+// Hiển thị modal thông tin
+function showInfoModal() {
+    totalTimePlayed += Math.floor((Date.now() - startTime) / 1000); // Cập nhật tổng thời gian đã chơi
+    document.getElementById('total-time').innerText = `Tổng thời gian đã chơi: ${totalTimePlayed} giây`;
+    document.getElementById('best-random').innerText = `Lần random may nhất: 1 trong ${bestRandom}`;
+    document.getElementById('total-coins').innerText = `Tổng số coin đã có: ${totalCoins}`;
+    document.getElementById('info-modal').style.display = 'flex';
+}
 
-                for (const pet of pets) {
-                    cumulativeProbability += pet.probability;
-                    if (random < cumulativeProbability) {
-                        selectedPet = pet.name;
-                        selectedProbability = Math.round(1 / pet.probability);
-                        selectedImage = pet.image;
-                        break;
-                    }
-                }
-            }
+// Hiển thị modal thú cưng
+function showPetModal(pet, probability, image) {
+    document.getElementById('pet-modal-image').src = image;
+    document.getElementById('pet-modal-info').innerText = `Tên: ${pet}\nXác suất: 1 trong ${probability}`;
+    document.getElementById('pet-modal').style.display = 'flex';
+}
 
-            document.getElementById('result').innerText = `Bạn nhận được: ${selectedPet}`;
-            document.getElementById('probability').innerText = `Xác suất: 1 trong ${selectedProbability}`;
-            document.getElementById('pet-image').src = selectedImage;
-            addPetToHistory(selectedPet, selectedProbability, selectedImage);
-            updateSpinCount();
-            addMoney(selectedProbability);
-            saveData(); // Save data after generating a pet
+// Đóng modal
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
 
-            // Cập nhật lần random may nhất
-            if (bestRandom === 0 || selectedProbability > bestRandom) {
-                bestRandom = selectedProbability;
-            }
+// Thêm chức năng cho nhập mã đổi thưởng
+function normalizeCode(input) {
+    let code = input.value.toLowerCase().replace(/\s+/g, ''); // Loại bỏ khoảng trắng
+    code = code.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Loại bỏ dấu
+    input.value = code; // Cập nhật lại giá trị input
+}
 
-            // Hiển thị GIF nếu độ hiếm từ 1 trong 10000 trở lên
-            if (selectedProbability >= 10000) {
-                const gifContainer = document.createElement('div');
-                gifContainer.style.position = 'fixed';
-                gifContainer.style.top = '0';
-                gifContainer.style.left = '0';
-                gifContainer.style.width = '100%';
-                gifContainer.style.height = '100%';
-                gifContainer.style.display = 'flex';
-                gifContainer.style.justifyContent = 'center';
-                gifContainer.style.alignItems = 'center';
-                gifContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                gifContainer.style.zIndex = '1000';
+function submitCode() {
+    const code = document.getElementById('code-input').value; // Lấy giá trị từ ô nhập mã
 
-                const gif = document.createElement('img');
-                gif.src = 'https://i.makeagif.com/media/11-22-2024/jwq3N7.gif';
-                gif.style.maxWidth = '100%';
-                gif.style.maxHeight = '100%';
-                gifContainer.appendChild(gif);
-
-                document.body.appendChild(gifContainer);
-
-                setTimeout(() => {
-                    gifContainer.remove();
-                }, 15000); // 15 giây
-            }
+    // Kiểm tra mã hợp lệ và xử lý
+    if (code === "meobeothichmcdonald") {
+        const pet = "MeoBeo";
+        const probability = 9999;
+        document.getElementById('result').innerText = `Bạn nhận được: ${pet}`;
+        document.getElementById('probability').innerText = `Xác suất: 1 trong ${probability}`;
+        document.getElementById('pet-image').src = 'https://phapluatxahoi.kinhtedothi.vn/stores/news_dataimages/2024/052024/10/19/in_article/ebd5c0ee2760fbb97936cb6b2baf9e6d.jpg?rt=20240510194835';
+        addPetToHistory(pet, probability, 'https://phapluatxahoi.kinhtedothi.vn/stores/news_dataimages/2024/052024/10/19/in_article/ebd5c0ee2760fbb97936cb6b2baf9e6d.jpg?rt=20240510194835');
+        addMoney(probability);
+        saveData(); // Lưu dữ liệu sau khi đổi thưởng
+    } else if (code === "godspeedrandom") {
+        applyGodspeedRandom();
+        alert("Thời gian hồi đã giảm xuống còn 0.2 giây!");
+    } else if (code === "test_mode") {
+        const multiplier = prompt("Nhập độ may mắn (x1 đến x100):");
+        if (multiplier && !isNaN(multiplier) && multiplier >= 1 && multiplier <= 100) {
+            luckMultiplier = multiplier;
+            alert(`Độ may mắn đã được đặt thành x${multiplier}`);
+        } else {
+            alert("Giá trị không hợp lệ. Vui lòng nhập số từ 1 đến 100.");
         }
-
-        function addPetToHistory(pet, probability, image) {
-            const tableBody = document.getElementById('history-table').getElementsByTagName('tbody')[0];
-            let found = false;
-
-            for (let i = 0; i < tableBody.rows.length; i++) {
-                const row = tableBody.rows[i];
-                if (row.cells[0].innerText.includes(pet)) {
-                    const count = parseInt(row.cells[0].innerText.split(' x')[1] || 1) + 1;
-                    row.cells[0].innerText = `${pet} x${count}`;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                const newRow = tableBody.insertRow();
-                const petCell = newRow.insertCell(0);
-                const probabilityCell = newRow.insertCell(1);
-                const infoCell = newRow.insertCell(2);
-                petCell.innerText = pet;
-                probabilityCell.innerText = `1 trong ${probability}`;
-                const infoButton = document.createElement('button');
-                infoButton.innerText = 'ℹ️';
-                infoButton.dataset.image = image;
-                infoButton.onclick = () => showPetModal(pet, probability, image);
-                infoCell.appendChild(infoButton);
-            }
-        }
-
-        function updateSpinCount() {
-            document.getElementById('spin-count').innerText = `Tổng số lần quay: ${spinCount}`;
-            const nextLuck = 10 - (spinCount % 10);
-            document.getElementById('next-luck').innerHTML = `Số lần quay đến khi tăng may mắn tiếp theo: ${nextLuck} <img src="https://pbs.twimg.com/media/GUmOAk8WMAEqeun.png" alt="Luck Icon" class="luck-icon">`;
-        }
-
-        function normalizeCode(input) {
-            let code = input.value.toLowerCase().replace(/\s+/g, '');
-            code = code.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            input.value = code;
-        }
-
-        function submitCode() {
-            const code = document.getElementById('code-input').value;
-            if (code === "meobeothichmcdonald") {
-                const pet = "MeoBeo";
-                const probability = 9999;
-                document.getElementById('result').innerText = `Bạn nhận được: ${pet}`;
-                document.getElementById('probability').innerText = `Xác suất: 1 trong ${probability}`;
-                document.getElementById('pet-image').src = 'https://phapluatxahoi.kinhtedothi.vn/stores/news_dataimages/2024/052024/10/19/in_article/ebd5c0ee2760fbb97936cb6b2baf9e6d.jpg?rt=20240510194835';
-                addPetToHistory(pet, probability, 'https://phapluatxahoi.kinhtedothi.vn/stores/news_dataimages/2024/052024/10/19/in_article/ebd5c0ee2760fbb97936cb6b2baf9e6d.jpg?rt=20240510194835');
-                addMoney(probability);
-                saveData(); // Save data after submitting code
-            } else if (code === "godspeedrandom") {
-                applyGodspeedRandom();
-                alert("Thời gian hồi đã giảm xuống còn 0.2 giây!");
-            } else if (code === "test_mode") {
-                const multiplier = prompt("Nhập độ may mắn (x1 đến x100):");
-                if (multiplier && !isNaN(multiplier) && multiplier >= 1 && multiplier <= 100) {
-                    luckMultiplier = multiplier;
-                    alert(`Độ may mắn đã được đặt thành x${multiplier}`);
-                } else {
-                    alert("Giá trị không hợp lệ. Vui lòng nhập số từ 1 đến 100.");
-                }
-            } else {
-                alert("Mã không hợp lệ");
-            }
-        }
-
-        function applyGodspeedRandom() {
-            const countdownBar = document.getElementById('countdown-bar');
-            countdownBar.style.transition = 'none';
-            countdownBar.style.width = '100%';
-            setTimeout(() => {
-                countdownBar.style.transition = 'width 0.2s linear';
-                countdownBar.style.width = '0%';
-            }, 10);
-        }
-
-        function addMoney(probability) {
-            const coins = probability; // Số xu nhận được bằng với độ hiếm của pet
-            money += coins;
-            totalCoins += coins;
-            document.getElementById('money').innerText = money;
-
-            // Chỉ hiển thị hiệu ứng tiền bay lên nếu độ hiếm nhỏ hơn 1 trong 600
-            if (probability < 600) {
-                for (let i = 0; i < coins; i++) {
-                    const coin = document.createElement('div');
-                    coin.className = 'coin';
-                    coin.innerText = '🪙'; // Thay thế bằng icon tiền của bạn
-                    document.body.appendChild(coin);
-                    coin.style.left = `${Math.random() * 100}%`;
-                    setTimeout(() => {
-                        coin.remove();
-                    }, 1000);
-                }
-            }
-
-            saveData(); // Save data after adding money
-        }
-
-        function showInfoModal() {
-            totalTimePlayed += Math.floor((Date.now() - startTime) / 1000); // Cập nhật tổng thời gian đã chơi
-            document.getElementById('total-time').innerText = `Tổng thời gian đã chơi: ${totalTimePlayed} giây`;
-            document.getElementById('best-random').innerText = `Lần random may nhất: 1 trong ${bestRandom}`;
-            document.getElementById('total-coins').innerText = `Tổng số coin đã có: ${totalCoins}`;
-            document.getElementById('info-modal').style.display = 'flex';
-        }
-
-        function showPetModal(pet, probability, image) {
-            document.getElementById('pet-modal-image').src = image;
-            document.getElementById('pet-modal-info').innerText = `Tên: ${pet}\nXác suất: 1 trong ${probability}`;
-            document.getElementById('pet-modal').style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-    </script>
+    } else {
+        alert("Mã không hợp lệ");
+    }
+}
+</script>
 </body>
 </html>
