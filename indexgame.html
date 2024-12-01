@@ -46,6 +46,19 @@
             font-weight: bold;
         }
 
+        .currency-box button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .currency-box button:hover {
+            background-color: #0056b3;
+        }
+
         .game-item {
             display: flex;
             align-items: center;
@@ -134,16 +147,43 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
+        .alert {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
     </style>
     <script>
         let coins = 0; // Số xu
         let candies = parseInt(localStorage.getItem('candies')) || 0; // Số kẹo
 
-        // Hàm khởi động: Tải số tiền từ localStorage
+        // Hàm khởi động: Tải dữ liệu từ localStorage
         function loadSavedData() {
-            coins = parseInt(localStorage.getItem('money')) || 0; // Đọc số tiền từ khóa 'money'
-            document.getElementById('coin-count').innerText = coins; // Cập nhật UI
-            document.getElementById('candy-count').innerText = candies;
+            coins = parseInt(localStorage.getItem('money')) || 0; // Đọc số xu
+            document.getElementById('coin-count').innerText = coins; // Hiển thị số xu
+            document.getElementById('candy-count').innerText = candies; // Hiển thị số kẹo
+        }
+
+        // Hàm đổi 100 xu lấy 1 kẹo
+        function exchangeCandy() {
+            const alertBox = document.getElementById('alert-box'); // Thông báo lỗi
+            alertBox.style.display = 'none'; // Ẩn thông báo mặc định
+
+            if (coins >= 100) {
+                coins -= 100;
+                candies += 1;
+                localStorage.setItem('money', coins); // Lưu lại số xu
+                localStorage.setItem('candies', candies); // Lưu lại số kẹo
+                updateUI();
+            } else {
+                alertBox.style.display = 'block';
+                alertBox.innerText = 'Bạn không đủ xu để đổi kẹo!';
+            }
         }
 
         // Hàm mở modal
@@ -161,7 +201,7 @@
                     localStorage.setItem('candies', candies); // Lưu lại
                     updateUI();
                     closeModal();
-                    window.location.href = gameLink; // Điều hướng tới trò chơi
+                    window.location.href = gameLink; // Chuyển tới trò chơi
                 } else {
                     alert('Bạn không đủ kẹo để chơi. Hãy đổi thêm kẹo trước!');
                     closeModal();
@@ -192,11 +232,15 @@
     <div class="container">
         <h1>Trung tâm trò chơi</h1>
 
-        <!-- Phần hiển thị tiền và kẹo -->
+        <!-- Thông báo -->
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Phần kiếm xu và đổi kẹo -->
         <div class="section">
             <div class="currency-box">
                 <span>Số xu: <span id="coin-count">0</span></span>
                 <span>Số kẹo: <span id="candy-count">0</span></span>
+                <button onclick="exchangeCandy()">Đổi kẹo (100 xu = 1 kẹo)</button>
             </div>
         </div>
 
