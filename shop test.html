@@ -3,38 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sử dụng tiền</title>
+    <title>Shop Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2, p {
+            color: #333;
+        }
+
+        #money {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #228b22;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(to bottom, #00c6ff, #0072ff);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 4px #0053ba;
+            cursor: pointer;
+        }
+
+        .button:active {
+            box-shadow: 0 2px #0053ba;
+            transform: translateY(2px);
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            display: inline-block;
+        }
+
+        .section h2, .section p {
+            margin: 5px 0;
+        }
+
+        .upgrade-section {
+            margin-bottom: 30px;
+        }
+
+        .upgrade-section h2, .upgrade-section p {
+            margin: 5px 0;
+        }
+    </style>
     <script>
+        let luckMultiplier = parseFloat(localStorage.getItem('luckMultiplier')) || 1;  // Độ may mắn ban đầu
+        let upgradeLuckCost = parseInt(localStorage.getItem('luckUpgradeCost')) || 1000; // Giá nâng cấp may mắn
+        let randomCooldownTime = parseFloat(localStorage.getItem('randomCooldownTime')) || 2; // Thời gian hồi ban đầu
+        let upgradeCooldownCost = parseInt(localStorage.getItem('cooldownUpgradeCost')) || 1000; // Giá nâng cấp tốc độ hồi
+
         window.onload = function () {
-            // Lấy số tiền từ localStorage
             const savedMoney = parseInt(localStorage.getItem('money')) || 0;
             document.getElementById('money').innerText = savedMoney;
+            updateLuckInfo();
+            updateCooldownInfo();
         };
 
         function spendMoney(amount) {
             let currentMoney = parseInt(localStorage.getItem('money')) || 0;
             if (currentMoney >= amount) {
                 currentMoney -= amount;
-                localStorage.setItem('money', currentMoney); // Cập nhật vào localStorage
+                localStorage.setItem('money', currentMoney);
                 document.getElementById('money').innerText = currentMoney;
-                alert(`Đã tiêu ${amount} tiền.`);
+                return true;
             } else {
                 alert("Không đủ tiền!");
+                return false;
             }
         }
 
+        // Nâng cấp may mắn
+        function upgradeLuck() {
+            if (spendMoney(upgradeLuckCost)) {
+                luckMultiplier += 0.1; // Tăng may mắn
+                upgradeLuckCost *= 2; // Tăng giá nâng cấp
+                localStorage.setItem('luckMultiplier', luckMultiplier);
+                localStorage.setItem('luckUpgradeCost', upgradeLuckCost);
+                alert(`Độ may mắn đã tăng lên x${luckMultiplier.toFixed(1)}!`);
+                updateLuckInfo();
+            }
+        }
+
+        // Nâng cấp tốc độ hồi random
+        function upgradeCooldown() {
+            if (spendMoney(upgradeCooldownCost)) {
+                randomCooldownTime *= 0.95; // Giảm thời gian hồi random 5%
+                upgradeCooldownCost *= 2; // Tăng giá nâng cấp
+                localStorage.setItem('randomCooldownTime', randomCooldownTime);
+                localStorage.setItem('cooldownUpgradeCost', upgradeCooldownCost);
+                alert(`Thời gian hồi random đã giảm xuống còn ${randomCooldownTime.toFixed(2)} giây!`);
+                updateCooldownInfo();
+            }
+        }
+
+        function updateLuckInfo() {
+            document.getElementById('luck-multiplier').innerText = `Độ may mắn hiện tại: x${luckMultiplier.toFixed(1)}`;
+            document.getElementById('luck-upgrade-cost').innerText = `Giá nâng cấp may mắn: ${upgradeLuckCost} xu`;
+        }
+
+        function updateCooldownInfo() {
+            document.getElementById('cooldown-time').innerText = `Thời gian hồi random: ${randomCooldownTime.toFixed(2)} giây`;
+            document.getElementById('cooldown-upgrade-cost').innerText = `Giá nâng cấp tốc độ hồi: ${upgradeCooldownCost} xu`;
+        }
+
         function goBackToGacha() {
-            window.location.href = "Gacha RNG 50.000!!!.html"; // Đường dẫn đến file Gacha RNG
+            window.location.href = "Gacha RNG 50.000!!!.html"; // Chuyển về Gacha RNG
         }
     </script>
 </head>
 <body>
-    <div>
-        <h1>Số tiền hiện tại: <span id="money">0</span></h1>
+    <h1>Số tiền hiện tại: <span id="money">0</span></h1>
+
+    <!-- Ô độ may mắn -->
+    <div class="section upgrade-section">
+        <h2 id="luck-multiplier">Độ may mắn hiện tại: x1</h2>
+        <p id="luck-upgrade-cost">Giá nâng cấp may mắn: 1000 xu</p>
+        <button class="button" onclick="upgradeLuck()">Nâng cấp độ may mắn</button>
     </div>
-    <button onclick="spendMoney(50)">Tiêu 50 tiền</button>
-    <br><br>
-    <!-- Nút quay lại -->
-    <button onclick="goBackToGacha()">Quay lại Gacha RNG</button>
+
+    <!-- Ô tốc độ hồi random -->
+    <div class="section">
+        <h2 id="cooldown-time">Thời gian hồi random: 2.00 giây</h2>
+        <p id="cooldown-upgrade-cost">Giá nâng cấp tốc độ hồi: 1000 xu</p>
+        <button class="button" onclick="upgradeCooldown()">Nâng cấp tốc độ hồi random</button>
+    </div>
+
+    <button class="button" onclick="goBackToGacha()">Quay lại Gacha RNG</button>
 </body>
 </html>
