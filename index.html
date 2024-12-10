@@ -85,19 +85,42 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Triết lý ngày mới
-            const philosophies = [
-                { quote: "Cuộc sống không phải là chờ bão qua đi mà là học cách nhảy múa trong mưa.", author: "Vivian Greene" },
-                { quote: "Hãy sống như thể bạn sẽ chết vào ngày mai. Học như thể bạn sẽ sống mãi mãi.", author: "Mahatma Gandhi" },
-                { quote: "Không có con đường nào đến với hạnh phúc. Hạnh phúc chính là con đường.", author: "Thích Nhất Hạnh" },
-                { quote: "Thành công không phải là chìa khóa của hạnh phúc. Hạnh phúc là chìa khóa của thành công.", author: "Albert Schweitzer" },
-                { quote: "Chúng ta không thể thay đổi gió, nhưng chúng ta có thể điều chỉnh cánh buồm.", author: "Aristotle" },
-                { quote: "Sự kiên nhẫn là mẹ của thành công.", author: "Benjamin Franklin" },
-                { quote: "Hãy thay đổi nếu bạn muốn mọi thứ thay đổi.", author: "Jim Rohn" },
-                { quote: "Sự khác biệt giữa người thành công và người thất bại nằm ở thái độ.", author: "William James" },
-                { quote: "Cuộc sống là 10% những gì xảy ra với bạn và 90% cách bạn phản ứng với nó.", author: "Charles Swindoll" },
-                { quote: "Hãy biến những điều bình thường trở nên phi thường.", author: "Tony Robbins" }
-            ];
-            const randomIndex = Math.floor(Math.random() * philosophies.length);
+const philosophies = [
+    { quote: "Cuộc sống không phải là chờ bão qua đi mà là học cách nhảy múa trong mưa.", author: "Vivian Greene" },
+    { quote: "Hãy sống như thể bạn sẽ chết vào ngày mai. Học như thể bạn sẽ sống mãi mãi.", author: "Mahatma Gandhi" },
+    { quote: "Không có con đường nào đến với hạnh phúc. Hạnh phúc chính là con đường.", author: "Thích Nhất Hạnh" },
+    { quote: "Thành công không phải là chìa khóa của hạnh phúc. Hạnh phúc là chìa khóa của thành công.", author: "Albert Schweitzer" },
+    { quote: "Chúng ta không thể thay đổi gió, nhưng chúng ta có thể điều chỉnh cánh buồm.", author: "Aristotle" },
+    { quote: "Sự kiên nhẫn là mẹ của thành công.", author: "Benjamin Franklin" },
+    { quote: "Hãy thay đổi nếu bạn muốn mọi thứ thay đổi.", author: "Jim Rohn" },
+    { quote: "Sự khác biệt giữa người thành công và người thất bại nằm ở thái độ.", author: "William James" },
+    { quote: "Cuộc sống là 10% những gì xảy ra với bạn và 90% cách bạn phản ứng với nó.", author: "Charles Swindoll" },
+    { quote: "Hãy biến những điều bình thường trở nên phi thường.", author: "Tony Robbins" },
+    { quote: "Hạnh phúc không phải là đích đến, mà là hành trình.", author: "Roy M. Goodman" },
+    { quote: "Người thành công là người có thể đặt nền móng vững chắc từ những viên gạch mà người khác ném vào mình.", author: "David Brinkley" },
+    { quote: "Đừng đếm những gì bạn đã mất, hãy trân trọng những gì bạn còn lại.", author: "Khuyết danh" },
+    { quote: "Hãy làm những gì bạn có thể, với những gì bạn có, ở nơi bạn đang ở.", author: "Theodore Roosevelt" },
+    { quote: "Thành công là một hành trình, không phải là đích đến.", author: "Ben Sweetland" },
+    { quote: "Hãy sống mỗi ngày như thể đó là ngày cuối cùng của bạn.", author: "Steve Jobs" },
+    { quote: "Không có gì là không thể với một trái tim kiên định.", author: "Khuyết danh" },
+    { quote: "Hãy tin rằng bạn có thể và bạn đã đi được nửa đường.", author: "Theodore Roosevelt" },
+    { quote: "Cuộc sống là một cuộc phiêu lưu táo bạo hoặc không là gì cả.", author: "Helen Keller" },
+    { quote: "Hãy luôn là phiên bản tốt nhất của chính mình.", author: "Khuyết danh" },
+    { quote: "Đừng bao giờ từ bỏ ước mơ của bạn chỉ vì thời gian cần để đạt được nó. Thời gian sẽ trôi qua dù bạn có làm hay không.", author: "Earl Nightingale" },
+    { quote: "Hãy làm những điều bạn sợ nhất và sự sợ hãi sẽ biến mất.", author: "Ralph Waldo Emerson" },
+    { quote: "Thành công không phải là cuối cùng, thất bại không phải là chết người: lòng can đảm tiếp tục mới quan trọng.", author: "Winston Churchill" },
+    { quote: "Hãy sống như thể bạn sẽ chết vào ngày mai. Học như thể bạn sẽ sống mãi mãi.", author: "Mahatma Gandhi" },
+    { quote: "Hãy làm những gì bạn có thể, với những gì bạn có, ở nơi bạn đang ở.", author: "Theodore Roosevelt" },
+    { quote: "Thành công là một hành trình, không phải là đích đến.", author: "Ben Sweetland" },
+    { quote: "Hãy sống mỗi ngày như thể đó là ngày cuối cùng của bạn.", author: "Steve Jobs" },
+    { quote: "Không có gì là không thể với một trái tim kiên định.", author: "Khuyết danh" },
+    { quote: "Hãy tin rằng bạn có thể và bạn đã đi được nửa đường.", author: "Theodore Roosevelt" },
+    { quote: "Cuộc sống là một cuộc phiêu lưu táo bạo hoặc không là gì cả.", author: "Helen Keller" },
+    { quote: "Hãy luôn là phiên bản tốt nhất của chính mình.", author: "Khuyết danh" },
+    { quote: "Đừng bao giờ từ bỏ ước mơ của bạn chỉ vì thời gian cần để đạt được nó. Thời gian sẽ trôi qua dù bạn có làm hay không.", author: "Earl Nightingale" },
+    { quote: "Hãy làm những điều bạn sợ nhất và sự sợ hãi sẽ biến mất.", author: "Ralph Waldo Emerson" },
+    { quote: "Thành công không phải là cuối cùng, thất bại không phải là chết người: lòng can đảm tiếp tục mới quan trọng.", author: "Winston Churchill" }
+];            const randomIndex = Math.floor(Math.random() * philosophies.length);
             document.querySelector('.philosophy').textContent = philosophies[randomIndex].quote;
             document.querySelector('.author').textContent = `- ${philosophies[randomIndex].author}`;
         });
