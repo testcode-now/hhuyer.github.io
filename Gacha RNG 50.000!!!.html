@@ -315,6 +315,7 @@
             { name: 'Hamster', probability: 1/25, image: 'https://lolipet.net/wp-content/uploads/2023/11/z4857310072695_728959d9bec5acddc5a04e389c77c113.jpg' },
             { name: 'Fish', probability: 1/5, image: 'https://i.natgeofe.com/n/18708334-6fce-40b5-ade6-a7e2db7035f2/01-goldfish-nationalgeographic_1567132.jpg?wp=1&w=1084.125&h=721.875' },
             { name: 'Parrot', probability: 1/30, image: 'https://blog.nature.org/wp-content/uploads/2019/09/5466780476_47f0336213_o.jpg?w=1024' },
+            { name: 'ĐỖ PHÚ QUÍ (PICKLEBALL)', probability: 1/37, image: 'https://photo-resize-zmp3.zadn.vn/w600_r1x1_jpeg/cover/5/d/a/7/5da7072eaf8a8cf3350ee91fb2544221.jpg'},
             { name: 'Turtle', probability: 1/50, image: 'https://ih1.redbubble.net/image.1123475296.4644/flat,750x,075,f-pad,750x1000,f8f8f8.jpg' },
             { name: 'MeoBeo', probability: 1/999, image: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/5/20/meo-beo-1716184689176563233778.jpg' },
             { name: 'Guinea Pig', probability: 1/35, image: 'https://i.pinimg.com/736x/96/ae/9e/96ae9eab678fc1a50af63acd5e5ab2dd.jpg' },
@@ -568,7 +569,6 @@
 let spinCount = 0;
 let isGenerating = false;
 let money = 0;
-let luckMultiplier = 1; // Biến để lưu trữ độ may mắn
 let totalCoins = 0; // Tổng số coin đã có từ trước đến nay
 let bestRandom = 0; // Lần random may nhất
 let totalTimePlayed = 0; // Tổng thời gian đã chơi từ trước đến nay
@@ -663,10 +663,10 @@ function showDailyNotification() {
     message.innerText = 'Hãy cùng quay hôm nay để nhận thú cưng giới hạn!';
 
     const image = document.createElement('img');
-    image.src = 'https://static.toiimg.com/thumb/msid-115690235,width-400,resizemode-4/115690235.jpg';
+    image.src = 'https://photo-resize-zmp3.zadn.vn/w600_r1x1_jpeg/cover/5/d/a/7/5da7072eaf8a8cf3350ee91fb2544221.jpg';
     image.style.maxWidth = '100%';
-    image.style.borderRadius = '10px';
-    image.style.marginBottom = '20px';
+    image.style.borderRadius = '1px';
+    image.style.marginBottom = '1px';
 
     const okButton = document.createElement('button');
     okButton.style.padding = '10px 20px';
@@ -723,16 +723,80 @@ function generateRandomPet() {
     }, intervalTime);
 }
 
-// Chức năng hiển thị thú cưng cuối cùng và lưu thông tin
+// Khai báo và lấy giá trị may mắn từ localStorage, mặc định là 1 nếu không có giá trị
+let luckMultiplier = parseFloat(localStorage.getItem('luckMultiplier')) || 1;
+
+// Kiểm tra xem giá trị luckMultiplier có được khởi tạo đúng không (in ra console)
+console.log(luckMultiplier);
+
+// Hàm để nâng cấp may mắn
+// Nâng cấp may mắn
+function upgradeLuck() {
+    if (spendMoney(upgradeLuckCost)) {
+        luckMultiplier += 0.1; // Tăng thêm x0.1
+        upgradeLuckCost *= 2; // Giá nâng cấp tăng gấp đôi
+        localStorage.setItem('luckMultiplier', luckMultiplier);
+        localStorage.setItem('luckUpgradeCost', upgradeLuckCost);
+        alert(`Độ may mắn đã tăng lên x${luckMultiplier.toFixed(1)}!`);
+        updateLuckInfo();
+    }
+}
+
+// Nâng cấp tốc độ hồi random
+function upgradeCooldown() {
+    if (spendMoney(upgradeCooldownCost)) {
+        randomCooldownTime *= 0.95; // Giảm thời gian hồi random 5%
+        upgradeCooldownCost *= 2; // Giá nâng cấp tăng gấp đôi
+        localStorage.setItem('randomCooldownTime', randomCooldownTime);
+        localStorage.setItem('cooldownUpgradeCost', upgradeCooldownCost);
+        alert(`Thời gian hồi random đã giảm xuống còn ${randomCooldownTime.toFixed(2)} giây!`);
+        updateCooldownInfo();
+    }
+}
+
+// Hàm quay thú cưng
+function generateRandomPet() {
+    if (isGenerating) return;
+    isGenerating = true;
+
+    document.getElementById('result').innerText = 'Đang tạo...';
+    document.getElementById('probability').innerText = '';
+
+    const countdownBar = document.getElementById('countdown-bar');
+    countdownBar.style.transition = 'none';
+    countdownBar.style.width = '100%';
+    setTimeout(() => {
+        countdownBar.style.transition = 'width 2s linear';
+        countdownBar.style.width = '0%';
+    }, 10);
+
+    let countdown = 2;
+    let intervalTime = 100;
+    const interval = setInterval(() => {
+        const randomPet = pets[Math.floor(Math.random() * pets.length)];
+        document.getElementById('result').innerText = `Đang ngẫu nhiên: ${randomPet.name}`;
+        countdown -= 0.1;
+        intervalTime += 50;
+        if (countdown <= 0) {
+            clearInterval(interval);
+            showFinalPet();
+            isGenerating = false;
+        }
+    }, intervalTime);
+}
+
+// Hàm để chọn thú cưng và tính xác suất trúng thưởng
 function showFinalPet() {
     spinCount++;
     let selectedPet = '';
     let selectedProbability = 0;
     let selectedImage = '';
-    let luckFactor = (1 + Math.floor(spinCount / 10) * 0.1 + Math.floor(spinCount / 100) * 1 + Math.floor(spinCount / 1000) * 10) * luckMultiplier;
+    
+    // Áp dụng luckMultiplier vào xác suất trúng
+    let luckFactor = luckMultiplier; // Sử dụng luckMultiplier trực tiếp để tăng cơ hội
 
     while (!selectedPet) {
-        const random = Math.random() * luckFactor;
+        const random = Math.random() * luckFactor; // Sử dụng luckFactor để tăng tỷ lệ trúng
         let cumulativeProbability = 0;
 
         for (const pet of pets) {
@@ -749,10 +813,11 @@ function showFinalPet() {
     document.getElementById('result').innerText = `Bạn nhận được: ${selectedPet}`;
     document.getElementById('probability').innerText = `Xác suất: 1 trong ${selectedProbability}`;
     document.getElementById('pet-image').src = selectedImage;
+
     addPetToHistory(selectedPet, selectedProbability, selectedImage);
     updateSpinCount();
     addMoney(selectedProbability);
-    saveData(); // Lưu dữ liệu sau khi tạo thú cưng
+    saveData();
 
     // Cập nhật lần random may nhất
     if (bestRandom === 0 || selectedProbability > bestRandom) {
@@ -822,6 +887,7 @@ function addMoney(probability) {
 }
 
 // Hiển thị modal thông tin
+// Định nghĩa hàm showInfoModal
 function showInfoModal() {
     totalTimePlayed += Math.floor((Date.now() - startTime) / 1000); // Cập nhật tổng thời gian đã chơi
     document.getElementById('total-time').innerText = `Tổng thời gian đã chơi: ${totalTimePlayed} giây`;
