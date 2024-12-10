@@ -134,7 +134,7 @@
     </div>
 
     <script>
-        let candies = parseInt(localStorage.getItem('candies')) || 100; // Số kẹo ban đầu
+        let candies = parseInt(localStorage.getItem('candies')) || 0; // Số kẹo ban đầu
         document.getElementById('candy-count').textContent = candies;
         const slider = document.getElementById('bet-slider');
         slider.max = candies;
